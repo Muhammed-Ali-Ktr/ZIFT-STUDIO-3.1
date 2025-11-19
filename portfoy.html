@@ -5,6 +5,131 @@
   <title>Zift Studio - Portföy</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="index.css">
+
+  <style> 
+/* GENEL */
+body {
+  margin: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: #0d0d0f;
+  color: #e5e5e7;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+p {
+  color: #c5c5c7;
+  line-height: 1.6;
+}
+
+/* HEADER */
+header {
+  padding: 32px 20px;
+  text-align: center;
+  background: #101014;
+  border-bottom: 1px solid #1f1f23;
+}
+
+header h1 {
+  font-size: 32px;
+}
+
+header p {
+  margin-top: 6px;
+  color: #9b9ba0;
+}
+
+/* PORTFÖY LISTESİ */
+#portfolio {
+  padding: 30px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.portfolio-item {
+  background: #141418;
+  border: 1px solid #1f1f23;
+  border-radius: 14px;
+  padding: 18px;
+  transition: 0.25s;
+  box-shadow: 0 0 0 transparent;
+}
+
+.portfolio-item:hover {
+  border-color: #3a3a40;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
+}
+
+/* RESİM */
+.thumb {
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.thumb:hover {
+  opacity: 0.85;
+  transform: scale(1.01);
+}
+
+/* LİNK (SITE AÇMA) */
+.site-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #5b8dff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+  font-size: 15px;
+}
+
+.site-link:hover {
+  color: #8ab0ff;
+  text-decoration: underline;
+}
+
+/* AÇILIR PANEL */
+.details {
+  background: #1a1a1f;
+  border-radius: 12px;
+  margin-top: 14px;
+  transition: height 0.3s ease;
+  border: 1px solid #26262c;
+}
+
+.details-inner {
+  padding: 16px;
+}
+
+.details-inner h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.details-inner ul {
+  padding-left: 18px;
+  margin: 12px 0 0 0;
+}
+
+.details-inner li {
+  margin-bottom: 6px;
+  color: #bfc0c3;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 25px;
+  margin-top: 30px;
+  color: #777;
+  font-size: 14px;
+}
+</style>
+
+
 </head>
 <body>
 
