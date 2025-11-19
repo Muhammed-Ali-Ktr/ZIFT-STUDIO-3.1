@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <title>Zift Studio - Portföy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+</head>
+<body>
+
+  <header>
+    <h1>Zift Studio — Yapılan Web Siteleri</h1>
+    <p>Fotoğrafa tıklayın; altında site açıklaması ve kullanılan teknolojiler sürgü şeklinde açılacak.</p>
+  </header>
+
+  <main>
+    <section id="portfolio">
+      <ul class="portfolio-list" style="list-style:none;padding:0;margin:0;">
+        <!-- ÖRNEK ÖĞE 1 -->
+        <li class="portfolio-item" data-id="1" style="margin-bottom:16px;border:1px solid #ddd;padding:8px;">
+          <div class="thumb-wrap">
+            <!-- Resme tıklama içeriği açar/kapatır -->
+            <img class="thumb" src="https://via.placeholder.com/640x360.png?text=Site+1+Görsel" alt="Site 1 görseli" style="max-width:100%;height:auto;display:block;cursor:pointer;">
+          </div>
+
+          <!-- Link ayrı: kullanıcıyı siteye yönlendirir -->
+          <div style="margin-top:8px;">
+            <a class="site-link" href="https://example.com" target="_blank" rel="noopener noreferrer">Siteyi aç (example.com)</a>
+          </div>
+
+          <!-- Açılır/kapanır detay paneli (başlangıçta kapalı) -->
+          <div class="details" aria-hidden="true" style="overflow:hidden;height:0px;">
+            <div class="details-inner" style="padding:12px 0;">
+              <h3>Site 1 — Kısa Açıklama</h3>
+              <p>Bu proje, kurumsal tanıtım sitesi olarak yapıldı. Ana özellikler: responsive tasarım, blog modülü, iletişim formu.</p>
+
+              <h4>Kullanılan Teknolojiler</h4>
+              <ul>
+                <li>HTML5</li>
+                <li>Vanilla JavaScript</li>
+                <li>Python Flask (backend)</li>
+                <li>PostgreSQL</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <!-- ÖRNEK ÖĞE 2 -->
+        <li class="portfolio-item" data-id="2" style="margin-bottom:16px;border:1px solid #ddd;padding:8px;">
+          <div class="thumb-wrap">
+            <img class="thumb" src="https://via.placeholder.com/640x360.png?text=Site+2+Görsel" alt="Site 2 görseli" style="max-width:100%;height:auto;display:block;cursor:pointer;">
+          </div>
+
+          <div style="margin-top:8px;">
+            <a class="site-link" href="https://example2.com" target="_blank" rel="noopener noreferrer">Siteyi aç (example2.com)</a>
+          </div>
+
+          <div class="details" aria-hidden="true" style="overflow:hidden;height:0px;">
+            <div class="details-inner" style="padding:12px 0;">
+              <h3>Site 2 — Kısa Açıklama</h3>
+              <p>Bu e-ticaret projesi, ürün katalogu, sepet ve ödeme akışı içerir.</p>
+
+              <h4>Kullanılan Teknolojiler</h4>
+              <ul>
+                <li>React</li>
+                <li>Node.js + Express</li>
+                <li>MongoDB</li>
+                <li>Stripe ödeme entegrasyonu</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <!-- ÖRNEK ÖĞE 3 -->
+        <li class="portfolio-item" data-id="3" style="margin-bottom:16px;border:1px solid #ddd;padding:8px;">
+          <div class="thumb-wrap">
+            <img class="thumb" src="https://via.placeholder.com/640x360.png?text=Site+3+Görsel" alt="Site 3 görseli" style="max-width:100%;height:auto;display:block;cursor:pointer;">
+          </div>
+
+          <div style="margin-top:8px;">
+            <a class="site-link" href="https://example3.com" target="_blank" rel="noopener noreferrer">Siteyi aç (example3.com)</a>
+          </div>
+
+          <div class="details" aria-hidden="true" style="overflow:hidden;height:0px;">
+            <div class="details-inner" style="padding:12px 0;">
+              <h3>Site 3 — Kısa Açıklama</h3>
+              <p>Landing page / kampanya sitesi. Performans ve SEO odaklı yapılandı.</p>
+
+              <h4>Kullanılan Teknolojiler</h4>
+              <ul>
+                <li>Static HTML</li>
+                <li>Netlify deploy</li>
+                <li>Google Analytics</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Not: Yeni öğe eklemek için yukarıdaki <code>li.portfolio-item</code> yapısını kopyala ve içeriği güncelle.</p>
+  </footer>
+
+<script>
+/*
+  Slide toggle animasyonu (CSS kullanmadan): 
+  - details elemanının gerçek iç yüksekliğini (scrollHeight) alıp height değeri animasyonla değiştiriyoruz.
+  - Kullanıcı tekrar tıklarsa panel kapatılır.
+*/
+
+(function(){
+  // Hız ayarı (ms)
+  var ANIMATION_DURATION = 320;
+
+  // Yardımcı: lineer zaman fonksiyonu
+  function easeLinear(t){ return t; }
+
+  // Animasyon fonksiyonu: element.style.height'ı animasyonla değiştirir
+  function animateHeight(element, from, to, duration, callback) {
+    var start = performance.now();
+    function frame(now) {
+      var elapsed = now - start;
+      var t = Math.min(1, elapsed / duration);
+      var v = easeLinear(t);
+      var current = from + (to - from) * v;
+      element.style.height = current + 'px';
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        if (typeof callback === 'function') callback();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Slide aç
+  function slideOpen(details) {
+    // iç elemanı ölç
+    var inner = details.querySelector('.details-inner');
+    if (!inner) inner = details;
+    // geçici olarak auto yapmak için scrollHeight hesaplıyoruz
+    var fullHeight = inner.scrollHeight;
+    // başlangıç 0 ise
+    details.style.height = '0px';
+    details.setAttribute('aria-hidden','false');
+
+    // animasyon
+    animateHeight(details, 0, fullHeight, ANIMATION_DURATION, function(){
+      // bittiğinde yüksekliği auto yapıp içerik rahatça genişlesin (ancak burada CSS yok,
+      // auto'ya geçerken sabit height kaldırılır; bir sonraki kapanışta tekrar 0'a animasyon yapılır)
+      details.style.height = 'auto';
+    });
+  }
+
+  // Slide kapat
+  function slideClose(details) {
+    // eğer height auto ise önce piksel değeri ata
+    var currentHeight = details.scrollHeight;
+    // set fixed height to animate from currentHeight to 0
+    details.style.height = currentHeight + 'px';
+    details.setAttribute('aria-hidden','true');
+
+    // ufak bir gecikme ile animasyon başlat (tarayıcı repaint için)
+    requestAnimationFrame(function(){
+      animateHeight(details, currentHeight, 0, ANIMATION_DURATION, function(){
+        details.style.height = '0px';
+      });
+    });
+  }
+
+  // Toggle
+  function toggleDetails(details) {
+    var isHidden = details.getAttribute('aria-hidden') === 'true' || details.style.height === '0px' || details.style.height === '';
+    if (isHidden) {
+      slideOpen(details);
+    } else {
+      slideClose(details);
+    }
+  }
+
+  // Event bağlama: tüm thumb'lara tıklayınca toggle
+  document.addEventListener('DOMContentLoaded', function(){
+    var thumbs = document.querySelectorAll('.portfolio-item .thumb');
+    thumbs.forEach(function(img){
+      img.addEventListener('click', function(e){
+        // bulunduğu portfolio-item içindeki details'ı bul
+        var item = img.closest('.portfolio-item');
+        if (!item) return;
+        var details = item.querySelector('.details');
+        if (!details) return;
+        toggleDetails(details);
+      });
+    });
+
+    // isteğe bağlı: site-link tıklandığında paneli aç (kullanıcı görmek isterse)
+    var links = document.querySelectorAll('.portfolio-item .site-link');
+    links.forEach(function(a){
+      a.addEventListener('click', function(){
+        var item = a.closest('.portfolio-item');
+        var details = item.querySelector('.details');
+        if (details && (details.getAttribute('aria-hidden') === 'true' || details.style.height === '0px' || details.style.height === '')) {
+          // siteye yönlendirme hemen gerçekleşmesin; paneli açıp sonra yönlendir (isteğe bağlı)
+          // burada yönlendirmeyi iptal etmiyoruz; eğer yönlendirme yerine önce panel açılmasını istersen,
+          // e.preventDefault() kullan ve ardından window.open(a.href) çağırabilirsin.
+        }
+      });
+    });
+  });
+})();
+</script>
+
+</body>
+  </html>
