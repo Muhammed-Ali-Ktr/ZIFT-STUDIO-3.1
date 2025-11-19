@@ -1,341 +1,737 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <title>Zift Studio - Portföy</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziftstudio - Portföy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <style> 
-/* GENEL */
-body {
-  margin: 0;
-  font-family: "Inter", Arial, sans-serif;
-  background: #0d0d0f;
-  color: #e5e5e7;
-}
+        :root {
+            --bg-primary: #0A0A0A;
+            --bg-secondary: #111111;
+            --bg-card: rgba(24, 24, 24, 0.6);
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --accent: #4D7CFE;
+            --accent-purple: #A855F7;
+            --glow: rgba(77, 124, 254, 0.4);
+            --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-h1, h2, h3, h4 {
-  margin: 0 0 12px 0;
-  font-weight: 600;
-  color: #ffffff;
-}
+        body.light-mode {
+            --bg-primary: #F5F5F5;
+            --bg-secondary: #FFFFFF;
+            --bg-card: rgba(255, 255, 255, 0.7);
+            --text-primary: #0A0A0A;
+            --text-secondary: #4A4A4A;
+            --accent: #2563EB;
+            --accent-purple: #9333EA;
+            --glow: rgba(37, 99, 235, 0.3);
+        }
 
-p {
-  color: #c5c5c7;
-  line-height: 1.6;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background var(--transition), color var(--transition);
+        }
 
-/* HEADER */
-header {
-  padding: 32px 20px;
-  text-align: center;
-  background: #101014;
-  border-bottom: 1px solid #1f1f23;
-}
+        /* Scroll Progress Bar */
+        #scrollProgress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+            z-index: 1000;
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 20px var(--glow);
+        }
 
-header h1 {
-  font-size: 32px;
-}
+        /* Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-header p {
-  margin-top: 6px;
-  color: #9b9ba0;
-}
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-/* PORTFÖY LISTESİ */
-#portfolio {
-  padding: 30px 20px;
-  max-width: 900px;
-  margin: auto;
-}
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            font-size: 1.5rem;
+        }
 
-.portfolio-item {
-  background: #141418;
-  border: 1px solid #1f1f23;
-  border-radius: 14px;
-  padding: 18px;
-  transition: 0.25s;
-  box-shadow: 0 0 0 transparent;
-}
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 0 30px var(--glow);
+        }
 
-.portfolio-item:hover {
-  border-color: #3a3a40;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.30);
-}
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
 
-/* RESİM */
-.thumb {
-  border-radius: 12px;
-  transition: 0.3s;
-}
+        /* Search & Filter Section */
+        .controls {
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
 
-.thumb:hover {
-  opacity: 0.85;
-  transform: scale(1.01);
-}
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
 
-/* LİNK (SITE AÇMA) */
-.site-link {
-  display: inline-block;
-  margin-top: 12px;
-  color: #5b8dff;
-  text-decoration: none;
-  font-weight: 500;
-  transition: 0.3s;
-  font-size: 15px;
-}
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all var(--transition);
+        }
 
-.site-link:hover {
-  color: #8ab0ff;
-  text-decoration: underline;
-}
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 30px var(--glow);
+        }
 
-/* AÇILIR PANEL */
-.details {
-  background: #1a1a1f;
-  border-radius: 12px;
-  margin-top: 14px;
-  transition: height 0.3s ease;
-  border: 1px solid #26262c;
-}
+        .search-box input::placeholder {
+            color: var(--text-secondary);
+        }
 
-.details-inner {
-  padding: 16px;
-}
+        /* Category Filters */
+        .categories {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
-.details-inner h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
+        .category-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-weight: 600;
+        }
 
-.details-inner ul {
-  padding-left: 18px;
-  margin: 12px 0 0 0;
-}
+        .category-btn:hover, .category-btn.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 30px var(--glow);
+            transform: translateY(-2px);
+        }
 
-.details-inner li {
-  margin-bottom: 6px;
-  color: #bfc0c3;
-}
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
 
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 25px;
-  margin-top: 30px;
-  color: #777;
-  font-size: 14px;
-}
-</style>
+        /* Project Card */
+        .project-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all var(--transition);
+            opacity: 0;
+            transform: translateY(50px) rotate(-2deg);
+        }
 
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0) rotate(0);
+        }
 
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px var(--glow);
+            border-color: var(--accent);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform var(--transition);
+        }
+
+        .project-card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-category {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .card-tech {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(77, 124, 254, 0.2);
+            color: var(--accent);
+            font-size: 0.85rem;
+            border: 1px solid var(--accent);
+        }
+
+        /* Detail Panel */
+        .detail-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 500;
+            display: none;
+            opacity: 0;
+            transition: all var(--transition);
+        }
+
+        .detail-overlay.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-panel {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+            border-radius: 30px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 30px 90px var(--glow);
+            transform: scale(0.95) translateY(-10px);
+            opacity: 0;
+            transition: all var(--transition);
+        }
+
+        .detail-overlay.active .detail-panel {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        /* Slider */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .slider-image {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--accent);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all var(--transition);
+        }
+
+        .slider-btn:hover {
+            background: var(--accent);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-btn.prev {
+            left: 20px;
+        }
+
+        .slider-btn.next {
+            right: 20px;
+        }
+
+        .detail-content {
+            padding: 2rem;
+        }
+
+        .detail-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .detail-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .detail-tech {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .tech-icon {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            font-weight: 600;
+        }
+
+        .visit-btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all var(--transition);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .visit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 45px var(--glow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .categories {
+                flex-direction: column;
+            }
+
+            .detail-title {
+                font-size: 1.8rem;
+            }
+
+            .slider-container {
+                height: 250px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
+    <div id="scrollProgress"></div>
 
-  <header>
-    <h1>Zift Studio — Yapılan Web Siteleri</h1>
-    <p>Fotoğrafa tıklayın; altında site açıklaması ve kullanılan teknolojiler sürgü şeklinde açılacak.</p>
-  </header>
+    <header>
+        <div class="logo">Ziftstudio.digital</div>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+    </header>
 
-  <main>
-    <section id="portfolio">
-      <ul class="portfolio-list" style="list-style:none;padding:0;margin:0;">
-        <!-- ÖRNEK ÖĞE 1 -->
-        <li class="portfolio-item" data-id="1" style="margin-bottom:16px;border:1px solid #ddd;padding:8px;">
-          <div class="thumb-wrap">
-            <!-- Resme tıklama içeriği açar/kapatır -->
-            <img class="thumb" src="https://via.placeholder.com/640x360.png?text=Site+1+Görsel" alt="Site 1 görseli" style="max-width:100%;height:auto;display:block;cursor:pointer;">
-          </div>
-
-          <!-- Link ayrı: kullanıcıyı siteye yönlendirir -->
-          <div style="margin-top:8px;">
-            <a class="site-link" href="https://example.com" target="_blank" rel="noopener noreferrer">Siteyi aç (example.com)</a>
-          </div>
-
-          <!-- Açılır/kapanır detay paneli (başlangıçta kapalı) -->
-          <div class="details" aria-hidden="true" style="overflow:hidden;height:0px;">
-            <div class="details-inner" style="padding:12px 0;">
-              <h3>Site 1 — Kısa Açıklama</h3>
-              <p>Bu proje, kurumsal tanıtım sitesi olarak yapıldı. Ana özellikler: responsive tasarım, blog modülü, iletişim formu.</p>
-
-              <h4>Kullanılan Teknolojiler</h4>
-              <ul>
-                <li>HTML5</li>
-                <li>Vanilla JavaScript</li>
-                <li>Python Flask (backend)</li>
-                <li>PostgreSQL</li>
-              </ul>
+    <div class="container">
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Projelerde Ara...">
             </div>
-          </div>
-        </li>
-
-        <!-- ÖRNEK ÖĞE 2 -->
-        <li class="portfolio-item" data-id="2" style="margin-bottom:16px;border:1px solid #ddd;padding:8px;">
-          <div class="thumb-wrap">
-            <img class="thumb" src="https://via.placeholder.com/640x360.png?text=Site+2+Görsel" alt="Site 2 görseli" style="max-width:100%;height:auto;display:block;cursor:pointer;">
-          </div>
-
-          <div style="margin-top:8px;">
-            <a class="site-link" href="https://example2.com" target="_blank" rel="noopener noreferrer">Siteyi aç (example2.com)</a>
-          </div>
-
-          <div class="details" aria-hidden="true" style="overflow:hidden;height:0px;">
-            <div class="details-inner" style="padding:12px 0;">
-              <h3>Site 2 — Kısa Açıklama</h3>
-              <p>Bu e-ticaret projesi, ürün katalogu, sepet ve ödeme akışı içerir.</p>
-
-              <h4>Kullanılan Teknolojiler</h4>
-              <ul>
-                <li>React</li>
-                <li>Node.js + Express</li>
-                <li>MongoDB</li>
-                <li>Stripe ödeme entegrasyonu</li>
-              </ul>
+            <div class="categories">
+                <button class="category-btn active" data-category="all">Hepsi</button>
+                <button class="category-btn" data-category="frontend">Frontend</button>
+                <button class="category-btn" data-category="backend">Backend</button>
+                <button class="category-btn" data-category="ecommerce">E-Ticaret</button>
+                <button class="category-btn" data-category="corporate">Kurumsal Site</button>
             </div>
-          </div>
-        </li>
+        </div>
 
-        <!-- ÖRNEK ÖĞE 3 -->
-        <li class="portfolio-item" data-id="3" style="margin-bottom:16px;border:1px solid #ddd;padding:8px;">
-          <div class="thumb-wrap">
-            <img class="thumb" src="https://via.placeholder.com/640x360.png?text=Site+3+Görsel" alt="Site 3 görseli" style="max-width:100%;height:auto;display:block;cursor:pointer;">
-          </div>
+        <div class="portfolio-grid" id="portfolioGrid"></div>
+    </div>
 
-          <div style="margin-top:8px;">
-            <a class="site-link" href="https://example3.com" target="_blank" rel="noopener noreferrer">Siteyi aç (example3.com)</a>
-          </div>
-
-          <div class="details" aria-hidden="true" style="overflow:hidden;height:0px;">
-            <div class="details-inner" style="padding:12px 0;">
-              <h3>Site 3 — Kısa Açıklama</h3>
-              <p>Landing page / kampanya sitesi. Performans ve SEO odaklı yapılandı.</p>
-
-              <h4>Kullanılan Teknolojiler</h4>
-              <ul>
-                <li>Static HTML</li>
-                <li>Netlify deploy</li>
-                <li>Google Analytics</li>
-              </ul>
+    <div class="detail-overlay" id="detailOverlay">
+        <div class="detail-panel" id="detailPanel">
+            <button class="close-btn" id="closeBtn">×</button>
+            <div class="slider-container">
+                <button class="slider-btn prev" id="prevBtn">‹</button>
+                <div class="slider-track" id="sliderTrack"></div>
+                <button class="slider-btn next" id="nextBtn">›</button>
             </div>
-          </div>
-        </li>
+            <div class="detail-content" id="detailContent"></div>
+        </div>
+    </div>
 
-      </ul>
-    </section>
-  </main>
+    <script>
+        // Project Data
+        const projects = [
+            {
+                id: 1,
+                title: "E-Ticaret Premium",
+                category: "ecommerce",
+                description: "Modern ve kullanıcı dostu tam özellikli e-ticaret platformu. Gelişmiş ödeme sistemleri, envanter yönetimi ve müşteri paneli içerir.",
+                tech: ["React", "Node.js", "MongoDB", "Stripe"],
+                images: ["https://images.unsplash.com/photo-1557821552-17105176677c?w=800", "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800", "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800"],
+                link: "https://example.com"
+            },
+            {
+                id: 2,
+                title: "Kurumsal Portfolio",
+                category: "corporate",
+                description: "Prestijli bir şirket için hazırlanan modern kurumsal web sitesi. Animasyonlar, iletişim formları ve çoklu dil desteği ile donatılmıştır.",
+                tech: ["Vue.js", "Laravel", "MySQL", "GSAP"],
+                images: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800", "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800"],
+                link: "https://example.com"
+            },
+            {
+                id: 3,
+                title: "SaaS Dashboard",
+                category: "frontend",
+                description: "Güçlü veri görselleştirme araçlarıyla donatılmış SaaS uygulaması dashboard'u. Gerçek zamanlı grafikler ve kullanıcı yönetimi.",
+                tech: ["React", "D3.js", "Redux", "Firebase"],
+                images: ["https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800", "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800", "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800"],
+                link: "https://example.com"
+            },
+            {
+                id: 4,
+                title: "API Gateway Sistemi",
+                category: "backend",
+                description: "Mikroservis mimarisi için tasarlanmış yüksek performanslı API gateway. Rate limiting, caching ve authentication özellikleri.",
+                tech: ["Node.js", "Redis", "Docker", "AWS"],
+                images: ["https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800", "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800", "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800"],
+                link: "https://example.com"
+            }
+        ];
 
-  <footer>
-    <p>Not: Yeni öğe eklemek için yukarıdaki <code>li.portfolio-item</code> yapısını kopyala ve içeriği güncelle.</p>
-  </footer>
+        // DOM Elements
+        const portfolioGrid = document.getElementById('portfolioGrid');
+        const detailOverlay = document.getElementById('detailOverlay');
+        const detailPanel = document.getElementById('detailPanel');
+        const closeBtn = document.getElementById('closeBtn');
+        const searchInput = document.getElementById('searchInput');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const themeToggle = document.getElementById('themeToggle');
+        const sliderTrack = document.getElementById('sliderTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const detailContent = document.getElementById('detailContent');
 
-<script>
-/*
-  Slide toggle animasyonu (CSS kullanmadan): 
-  - details elemanının gerçek iç yüksekliğini (scrollHeight) alıp height değeri animasyonla değiştiriyoruz.
-  - Kullanıcı tekrar tıklarsa panel kapatılır.
-*/
+        let currentSlideIndex = 0;
+        let currentProject = null;
 
-(function(){
-  // Hız ayarı (ms)
-  var ANIMATION_DURATION = 320;
+        // Render Projects
+        function renderProjects(projectsToRender) {
+            portfolioGrid.innerHTML = '';
+            projectsToRender.forEach((project, index) => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.dataset.category = project.category;
+                card.innerHTML = `
+                    <img src="${project.images[0]}" alt="${project.title}" class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">${project.title}</h3>
+                        <p class="card-category">${getCategoryName(project.category)}</p>
+                        <div class="card-tech">
+                            ${project.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => openDetail(project));
+                portfolioGrid.appendChild(card);
 
-  // Yardımcı: lineer zaman fonksiyonu
-  function easeLinear(t){ return t; }
-
-  // Animasyon fonksiyonu: element.style.height'ı animasyonla değiştirir
-  function animateHeight(element, from, to, duration, callback) {
-    var start = performance.now();
-    function frame(now) {
-      var elapsed = now - start;
-      var t = Math.min(1, elapsed / duration);
-      var v = easeLinear(t);
-      var current = from + (to - from) * v;
-      element.style.height = current + 'px';
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        if (typeof callback === 'function') callback();
-      }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  // Slide aç
-  function slideOpen(details) {
-    // iç elemanı ölç
-    var inner = details.querySelector('.details-inner');
-    if (!inner) inner = details;
-    // geçici olarak auto yapmak için scrollHeight hesaplıyoruz
-    var fullHeight = inner.scrollHeight;
-    // başlangıç 0 ise
-    details.style.height = '0px';
-    details.setAttribute('aria-hidden','false');
-
-    // animasyon
-    animateHeight(details, 0, fullHeight, ANIMATION_DURATION, function(){
-      // bittiğinde yüksekliği auto yapıp içerik rahatça genişlesin (ancak burada CSS yok,
-      // auto'ya geçerken sabit height kaldırılır; bir sonraki kapanışta tekrar 0'a animasyon yapılır)
-      details.style.height = 'auto';
-    });
-  }
-
-  // Slide kapat
-  function slideClose(details) {
-    // eğer height auto ise önce piksel değeri ata
-    var currentHeight = details.scrollHeight;
-    // set fixed height to animate from currentHeight to 0
-    details.style.height = currentHeight + 'px';
-    details.setAttribute('aria-hidden','true');
-
-    // ufak bir gecikme ile animasyon başlat (tarayıcı repaint için)
-    requestAnimationFrame(function(){
-      animateHeight(details, currentHeight, 0, ANIMATION_DURATION, function(){
-        details.style.height = '0px';
-      });
-    });
-  }
-
-  // Toggle
-  function toggleDetails(details) {
-    var isHidden = details.getAttribute('aria-hidden') === 'true' || details.style.height === '0px' || details.style.height === '';
-    if (isHidden) {
-      slideOpen(details);
-    } else {
-      slideClose(details);
-    }
-  }
-
-  // Event bağlama: tüm thumb'lara tıklayınca toggle
-  document.addEventListener('DOMContentLoaded', function(){
-    var thumbs = document.querySelectorAll('.portfolio-item .thumb');
-    thumbs.forEach(function(img){
-      img.addEventListener('click', function(e){
-        // bulunduğu portfolio-item içindeki details'ı bul
-        var item = img.closest('.portfolio-item');
-        if (!item) return;
-        var details = item.querySelector('.details');
-        if (!details) return;
-        toggleDetails(details);
-      });
-    });
-
-    // isteğe bağlı: site-link tıklandığında paneli aç (kullanıcı görmek isterse)
-    var links = document.querySelectorAll('.portfolio-item .site-link');
-    links.forEach(function(a){
-      a.addEventListener('click', function(){
-        var item = a.closest('.portfolio-item');
-        var details = item.querySelector('.details');
-        if (details && (details.getAttribute('aria-hidden') === 'true' || details.style.height === '0px' || details.style.height === '')) {
-          // siteye yönlendirme hemen gerçekleşmesin; paneli açıp sonra yönlendir (isteğe bağlı)
-          // burada yönlendirmeyi iptal etmiyoruz; eğer yönlendirme yerine önce panel açılmasını istersen,
-          // e.preventDefault() kullan ve ardından window.open(a.href) çağırabilirsin.
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 100);
+            });
         }
-      });
-    });
-  });
-})();
-</script>
 
+        function getCategoryName(category) {
+            const names = {
+                frontend: 'Frontend',
+                backend: 'Backend',
+                ecommerce: 'E-Ticaret',
+                corporate: 'Kurumsal Site'
+            };
+            return names[category] || category;
+        }
+
+        // Open Detail Panel
+        function openDetail(project) {
+            currentProject = project;
+            currentSlideIndex = 0;
+
+            sliderTrack.innerHTML = project.images.map(img => 
+                `<img src="${img}" alt="${project.title}" class="slider-image">`
+            ).join('');
+
+            detailContent.innerHTML = `
+                <h2 class="detail-title">${project.title}</h2>
+                <p class="detail-description">${project.description}</p>
+                <div class="detail-tech">
+                    ${project.tech.map(tech => `<div class="tech-icon">⚡ ${tech}</div>`).join('')}
+                </div>
+                <a href="${project.link}" target="_blank" class="visit-btn">🚀 Siteyi Ziyaret Et</a>
+            `;
+
+            detailOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Detail Panel
+        function closeDetail() {
+            detailOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeBtn.addEventListener('click', closeDetail);
+        detailOverlay.addEventListener('click', (e) => {
+            if (e.target === detailOverlay) closeDetail();
+        });
+
+        // Slider Functions
+        function updateSlider() {
+            sliderTrack.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentProject) {
+                currentSlideIndex = (currentSlideIndex - 1 + currentProject.images.length) % currentProject.images.length;
+                updateSlider();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentProject) {
+                currentSlideIndex = (currentSlideIndex + 1) % currentProject.images.length;
+                updateSlider();
+            }
+        });
+
+        // Touch Swipe for Slider
+        let touchStartX = 0;
+        sliderTrack.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        sliderTrack.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextBtn.click();
+                else prevBtn.click();
+            }
+        });
+
+        // Search Functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = projects.filter(project => 
+                project.title.toLowerCase().includes(searchTerm) ||
+                project.description.toLowerCase().includes(searchTerm) ||
+                project.tech.some(tech => tech.toLowerCase().includes(searchTerm))
+            );
+            renderProjects(filtered);
+        });
+
+        // Category Filter
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+                const filtered = category === 'all' ? projects : projects.filter(p => p.category === category);
+                
+                const cards = document.querySelectorAll('.project-card');
+                cards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(50px) rotate(-2deg)';
+                });
+
+                setTimeout(() => {
+                    renderProjects(filtered);
+                }, 300);
+            });
+        });
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            themeToggle.textContent = isLight ? '☀️' : '🌙';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+
+        // Load Theme from LocalStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            themeToggle.textContent = '☀️';
+        }
+
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollProgress').style.width = progress + '%';
+        });
+
+        // Intersection Observer for Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Initialize
+        renderProjects(projects);
+
+        // 3D Parallax Effect on Cards
+        portfolioGrid.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+
+                if (e.target.closest('.project-card') === card) {
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
+                }
+            });
+        });
+
+        portfolioGrid.addEventListener('mouseleave', () => {
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                card.style.transform = '';
+            });
+        });
+    </script>
 </body>
-  </html>
+</html>
