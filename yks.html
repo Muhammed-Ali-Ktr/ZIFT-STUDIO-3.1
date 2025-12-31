@@ -41,14 +41,19 @@
             }
         }
         
-        /* Genel Stiller */
+                /* Genel Stiller */
         body {
             background: var(--bg);
             color: var(--text);
             margin: 0;
             font-family: system-ui, sans-serif;
             line-height: 1.6;
+            
+            /* ✨ EKLENECEK KURAL: Yatay taşmayı gizler */
+            overflow-x: hidden; 
+            /* Bu, sayfanın yatayda kaydırılmasını tamamen engeller. */
         }
+
 
         /* Ana Grid Yapısı (Profesyonel Yerleşim) */
         .page-content {
